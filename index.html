@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chosen</title>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+<script type="text/javascript" src="xlsx.full.min.js"></script>
+
 <body>
-    
+    <div id="wrapper">
+        <input type="file" id="input-excel" /> </div>
+    <script>
+        $('#input-excel').change(function (e) {
+            var reader = new FileReader();
+            reader.readAsArrayBuffer(e.target.files[0]);
+            reader.onload = function (e) {
+                var data = new Uint8Array(reader.result);
+                var wb = XLSX.read(data, {
+                    type: 'array'
+                });
+                var htmlstr = XLSX.write(wb, {
+                    sheet: 'sheet 1',
+                    type: 'binary',
+                    bookType: 'html'
+                });
+                $('wrapper')[0].innerHTML += htmlstr;
+            }
+        })
+    </script>
 </body>
+
 </html>
